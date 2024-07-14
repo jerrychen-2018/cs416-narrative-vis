@@ -1,0 +1,149 @@
+<!--
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Scene Navigation</title>
+        <style>
+          /* Optional: Basic styling for navigation buttons */
+          .nav-button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+          }
+        </style>
+    </head>
+    <script src='https://d3js.org/d3.v5.min.js'></script>
+    <style> circle {fill: lightblue; stroke: black;} </style>
+    <body onload='init()'>
+        <div id='canvas' style="text-align:center;"></div>
+        
+        <script>
+            async function init() {
+                var canvas = d3.select('#canvas').append('svg').attr('width', 700).attr('height', 600);
+
+                const data = await d3.csv("https://flunky.github.io/cars2017.csv");
+                var y = d3.scaleLog().domain([10,150]).range([200,0])
+                var x = d3.scaleLog().domain([10,150]).range([0, 200])
+                d3.select("svg").append("g")
+                d3.select("g").attr("transform","translate("+50+","+50+")").selectAll("circle").data(data).enter().append("circle").attr("cx", function(d) {return x(d["AverageCityMPG"]);}).attr("cy", function(d) {return y(d["AverageHighwayMPG"]);}).attr('r', function(d) { return 2+d.EngineCylinders; })
+
+                
+                d3.select("svg").append("g").attr("transform","translate("+50+","+50+")").call(d3.axisLeft(y).tickValues([10, 20, 50, 100]).tickFormat(d3.format("~s")));
+                d3.select("svg").append("g").attr("transform","translate("+50+","+250+")").call(d3.axisBottom(x).tickValues([10, 20, 50, 100]).tickFormat(d3.format("~s")));
+            }
+        </script>
+    </body>
+</html>-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scene Navigation</title>
+  <style>
+
+    /* Styling for circles */
+    circle {
+      fill: lightblue; 
+      stroke: black;
+    }
+    /* Optional: Basic styling for navigation buttons */
+    .nav-button {
+      padding: 10px 20px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 10px;
+    }
+
+    /* Highlight style for active button */
+    .nav-button.active {
+      background-color: #4c6daf; /* Green background */
+      color: white;
+    }
+
+    /* Hide all scenes initially except scene1 */
+    .scene {
+      display: none;
+    }
+
+    #scene1 {
+      display: block;
+    }
+  </style>
+</head>
+<script src='https://d3js.org/d3.v5.min.js'></script>
+<body onload='init()'>
+  
+  <!-- Navigation buttons -->
+  <div style="text-align:center;">
+    <button id="button1" class="nav-button active" onclick="navigateToScene(1)">1</button>
+    <button id="button2" class="nav-button" onclick="navigateToScene(2)">2</button>
+    <button id="button3" class="nav-button" onclick="navigateToScene(3)">3</button>
+  </div>
+
+  <div id="scene1" class="scene" style="text-align:center;">
+    <h1>Scene 1</h1>
+    <p>This is the content of Scene 1.</p>
+    <script>
+      async function init() {
+          var canvas = d3.select('#scene1').append('svg').attr('width', 700).attr('height', 600);
+
+          const data = await d3.csv("https://flunky.github.io/cars2017.csv");
+          var y = d3.scaleLog().domain([10,150]).range([200,0])
+          var x = d3.scaleLog().domain([10,150]).range([0, 200])
+          d3.select("svg").append("g")
+          d3.select("g").attr("transform","translate("+50+","+50+")").selectAll("circle").data(data).enter().append("circle").attr("cx", function(d) {return x(d["AverageCityMPG"]);}).attr("cy", function(d) {return y(d["AverageHighwayMPG"]);}).attr('r', function(d) { return 2+d.EngineCylinders; })
+
+          
+          d3.select("svg").append("g").attr("transform","translate("+50+","+50+")").call(d3.axisLeft(y).tickValues([10, 20, 50, 100]).tickFormat(d3.format("~s")));
+          d3.select("svg").append("g").attr("transform","translate("+50+","+250+")").call(d3.axisBottom(x).tickValues([10, 20, 50, 100]).tickFormat(d3.format("~s")));
+      }
+    </script>
+  </div>
+  
+  <div id="scene2" class="scene" style="text-align:center;">
+    <h1>Scene 2</h1>
+    <p>This is the content of Scene 2.</p>
+  </div>
+  
+  <div id="scene3" class="scene" style="text-align:center;">
+    <h1>Scene 3</h1>
+    <p>This is the content of Scene 3.</p>
+  </div>
+
+  <script>
+    // JavaScript code for navigation and button highlighting
+    function navigateToScene(sceneNumber) {
+      // Hide all scenes
+      const scenes = document.querySelectorAll('.scene');
+      scenes.forEach(scene => {
+        scene.style.display = 'none';
+      });
+
+      // Display the selected scene
+      const selectedScene = document.getElementById(`scene${sceneNumber}`);
+      if (selectedScene) {
+        selectedScene.style.display = 'block';
+      }
+
+      // Highlight the corresponding button
+      const buttons = document.querySelectorAll('.nav-button');
+      buttons.forEach(button => {
+        button.classList.remove('active');
+      });
+
+      const activeButton = document.getElementById(`button${sceneNumber}`);
+      if (activeButton) {
+        activeButton.classList.add('active');
+      }
+    }
+  </script>
+</body>
+</html>
+
+
+
+
+<!--drill down story-->
