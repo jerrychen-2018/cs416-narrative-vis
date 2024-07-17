@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Page 3</title>
+</head>
+<script src='https://d3js.org/d3.v5.min.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.5.1/d3-annotation.min.js" integrity="sha512-iBAeBWWWFb8HqSBcrqcz98iIpuVH1la39dEYHtyQ/pGpeCQTQVvLJOWAuhv2Q7JSHp9k7hWA7sGxU3hHJe+tFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<style> circle {stroke: black;} </style>
+<button onclick="navigateToPage('index.html')">Go to Page 1</button>
+<button onclick="navigateToPage('scene2.html')">Go to Page 2</button>
+<button onclick="navigateToPage('scene3.html')">Go to Page 3</button>
+<h1>Page 3</h1>
+<div class="chart" style="text-align:center;">
+    <svg id='canvas' width=900 height=900></svg>
+</div>
+<body onload='init()'>
+  <script>
+    async function init() {
+      
+        const data = await d3.csv("https://flunky.github.io/cars2017.csv");
+        var y = d3.scaleLog().domain([10,150]).range([550,0])
+        var x = d3.scaleLog().domain([10,150]).range([0, 550])
+
+        d3.select("svg").append("g")
+        var circles = d3.select("g")
+          .attr("transform","translate("+50+","+50+")")
+          .selectAll("circle")
+          .data(data)
+          .enter()
+          .append("circle")
+          .attr("cx", function(d) {return x(d["AverageCityMPG"]);})
+          .attr("cy", function(d) {return y(d["AverageHighwayMPG"]);})
+          .attr('r', function(d) { return 2+parseInt(d.EngineCylinders); })
+          .style("fill", function(d) 
+             { 
+               if (d.Fuel === 'Electricity') 
+               {
+                 return "red";
+               } 
+               return "lightblue";
+             })
+          
+
+        
+        d3.select("svg").append("g").attr("transform","translate("+50+","+50+")").call(d3.axisLeft(y).tickValues([10, 20, 50, 100]).tickFormat(d3.format("~s")));
+        d3.select("svg").append("g").attr("transform","translate("+50+","+600+")").call(d3.axisBottom(x).tickValues([10, 20, 50, 100]).tickFormat(d3.format("~s")));
+    }
+</script>
+
+<script>
+    const annotations = [{
+            type: d3.annotationCalloutCircle, 
+            note: {
+              label: "Electricity",
+              title: "Annotation title"
+            },
+            //can use x, y directly instead of data
+            x: 490,
+            y: 80, 
+            dy: 100,
+            dx: 200,
+            subject: {
+              radius: 80,
+              radiusPadding: 3
+            }
+    }
+    ]
+    const makeAnnotations = d3.annotation().annotations(annotations)
+    d3.select("svg").append("g").call(makeAnnotations);
+  </script>
+
+  <script src="script.js"></script>
+</body>
+</html>

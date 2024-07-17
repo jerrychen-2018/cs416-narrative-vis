@@ -36,114 +36,82 @@
         </script>
     </body>
 </html>-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Scene Navigation</title>
-  <style>
-
-    /* Styling for circles */
-    circle {
-      fill: lightblue; 
-      stroke: black;
-    }
-    /* Optional: Basic styling for navigation buttons */
-    .nav-button {
-      padding: 10px 20px;
-      font-size: 16px;
-      cursor: pointer;
-      margin: 10px;
-    }
-
-    /* Highlight style for active button */
-    .nav-button.active {
-      background-color: #4c6daf; /* Green background */
-      color: white;
-    }
-
-    /* Hide all scenes initially except scene1 */
-    .scene {
-      display: none;
-    }
-
-    #scene1 {
-      display: block;
-    }
-  </style>
+  <title>Page 1</title>
 </head>
-<script src='https://d3js.org/d3.v5.min.js'></script>
+<script src="https://d3js.org/d3.v5.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.5.1/d3-annotation.min.js" integrity="sha512-iBAeBWWWFb8HqSBcrqcz98iIpuVH1la39dEYHtyQ/pGpeCQTQVvLJOWAuhv2Q7JSHp9k7hWA7sGxU3hHJe+tFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<style> circle {stroke: black;} </style>
+<button onclick="navigateToPage('index.html')">Go to Page 1</button>
+<button onclick="navigateToPage('scene2.html')">Go to Page 2</button>
+<button onclick="navigateToPage('scene3.html')">Go to Page 3</button>
+<h1>Page 1</h1>
+<div class="chart" style="text-align:center;">
+  <svg id='canvas' width=900 height=900></svg>
+</div>
 <body onload='init()'>
-  
-  <!-- Navigation buttons -->
-  <div style="text-align:center;">
-    <button id="button1" class="nav-button active" onclick="navigateToScene(1)">1</button>
-    <button id="button2" class="nav-button" onclick="navigateToScene(2)">2</button>
-    <button id="button3" class="nav-button" onclick="navigateToScene(3)">3</button>
-  </div>
-
-  <div id="scene1" class="scene" style="text-align:center;">
-    <h1>Scene 1</h1>
-    <p>This is the content of Scene 1.</p>
-    <script>
+  <script>
       async function init() {
-          var canvas = d3.select('#scene1').append('svg').attr('width', 700).attr('height', 600);
-
+        
           const data = await d3.csv("https://flunky.github.io/cars2017.csv");
-          var y = d3.scaleLog().domain([10,150]).range([200,0])
-          var x = d3.scaleLog().domain([10,150]).range([0, 200])
+          var y = d3.scaleLog().domain([10,150]).range([550,0])
+          var x = d3.scaleLog().domain([10,150]).range([0, 550])
+
           d3.select("svg").append("g")
-          d3.select("g").attr("transform","translate("+50+","+50+")").selectAll("circle").data(data).enter().append("circle").attr("cx", function(d) {return x(d["AverageCityMPG"]);}).attr("cy", function(d) {return y(d["AverageHighwayMPG"]);}).attr('r', function(d) { return 2+d.EngineCylinders; })
+          var circles = d3.select("g")
+            .attr("transform","translate("+50+","+50+")")
+            .selectAll("circle")
+            .data(data)
+            .enter()
+            .append("circle")
+            .attr("cx", function(d) {return x(d["AverageCityMPG"]);})
+            .attr("cy", function(d) {return y(d["AverageHighwayMPG"]);})
+            .attr('r', function(d) { return 2+parseInt(d.EngineCylinders); })
+            .style("fill", function(d) 
+               { 
+                 if (d.Fuel === 'Gasoline') 
+                 {
+                   return "red";
+                 } 
+                 return "lightblue";
+               })
+            
 
           
           d3.select("svg").append("g").attr("transform","translate("+50+","+50+")").call(d3.axisLeft(y).tickValues([10, 20, 50, 100]).tickFormat(d3.format("~s")));
-          d3.select("svg").append("g").attr("transform","translate("+50+","+250+")").call(d3.axisBottom(x).tickValues([10, 20, 50, 100]).tickFormat(d3.format("~s")));
+          d3.select("svg").append("g").attr("transform","translate("+50+","+600+")").call(d3.axisBottom(x).tickValues([10, 20, 50, 100]).tickFormat(d3.format("~s")));
       }
-    </script>
-  </div>
-  
-  <div id="scene2" class="scene" style="text-align:center;">
-    <h1>Scene 2</h1>
-    <p>This is the content of Scene 2.</p>
-  </div>
-  
-  <div id="scene3" class="scene" style="text-align:center;">
-    <h1>Scene 3</h1>
-    <p>This is the content of Scene 3.</p>
-  </div>
-
-  <script>
-    // JavaScript code for navigation and button highlighting
-    function navigateToScene(sceneNumber) {
-      // Hide all scenes
-      const scenes = document.querySelectorAll('.scene');
-      scenes.forEach(scene => {
-        scene.style.display = 'none';
-      });
-
-      // Display the selected scene
-      const selectedScene = document.getElementById(`scene${sceneNumber}`);
-      if (selectedScene) {
-        selectedScene.style.display = 'block';
-      }
-
-      // Highlight the corresponding button
-      const buttons = document.querySelectorAll('.nav-button');
-      buttons.forEach(button => {
-        button.classList.remove('active');
-      });
-
-      const activeButton = document.getElementById(`button${sceneNumber}`);
-      if (activeButton) {
-        activeButton.classList.add('active');
-      }
-    }
   </script>
+  <script>
+    const annotations = [{
+            type: d3.annotationCalloutCircle, 
+            note: {
+              label: "Gasoline",
+              title: "Annotation title"
+            },
+            //can use x, y directly instead of data
+            x: 100,
+            y: 375, 
+            dy: -150,
+            dx: 200,
+            subject: {
+              radius: 150,
+              radiusPadding: 3
+            }
+    }
+    ]
+    const makeAnnotations = d3.annotation().annotations(annotations)
+    d3.select("svg").append("g").call(makeAnnotations);
+  </script>
+
+  <script src="script.js"></script>
 </body>
 </html>
 
 
 
-
-<!--drill down story-->
