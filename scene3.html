@@ -3,22 +3,43 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Page 3</title>
+  <title>Electric Cars</title>
 </head>
 <script src='https://d3js.org/d3.v5.min.js'></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.5.1/d3-annotation.min.js" integrity="sha512-iBAeBWWWFb8HqSBcrqcz98iIpuVH1la39dEYHtyQ/pGpeCQTQVvLJOWAuhv2Q7JSHp9k7hWA7sGxU3hHJe+tFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<style> circle {stroke: black;} </style>
-<button onclick="navigateToPage('index.html')">Go to Page 1</button>
-<button onclick="navigateToPage('scene2.html')">Go to Page 2</button>
-<button onclick="navigateToPage('scene3.html')">Go to Page 3</button>
-<h1>Page 3</h1>
-<div class="chart" style="text-align:center;">
-    <svg id='canvas' width=900 height=900></svg>
+<style> 
+    circle {stroke: black;} 
+
+    .button {
+        background-color: grey;
+        color: white;
+        display: inline-block;
+        cursor: pointer;
+    }
+</style>
+<h1>Average Highway MPG & Average City MPG of Cars in 2017</h1>
+<div id="container" style="display: flex;">
+    <div id="content" style="margin-left:30px;inline-size:200px;">
+        <button onclick="navigateToPage('index.html')">1</button>
+        <button onclick="navigateToPage('scene2.html')">2</button>
+        <button class="button" onclick="navigateToPage('scene3.html')">3</button>
+        <h2>Electric Cars</h2>
+        <p>
+            Electric cars stand out from gasoline and diesel-powered cars, with
+            high miles per gallon values on both the highway and in the city. The various makes of the 
+            electric cars include:<br> BMW, Chevrolet, Fiat, Ford,
+            Hyundai, Kia, Mercedes-Benz, Mitsubishi, Nissan, and Tesla.
+        </p>
+    </div>
+    <div class="chart" style="margin-left:45px;">
+        <svg id='canvas' width=900 height=900></svg>
+    </div>
 </div>
+
 <body onload='init()'>
   <script>
     async function init() {
-      
+
         const data = await d3.csv("https://flunky.github.io/cars2017.csv");
         var y = d3.scaleLog().domain([10,150]).range([550,0])
         var x = d3.scaleLog().domain([10,150]).range([0, 550])
@@ -53,8 +74,8 @@
     const annotations = [{
             type: d3.annotationCalloutCircle, 
             note: {
-              label: "Electricity",
-              title: "Annotation title"
+              label: "Cars that run on electricity tend to have higher Average Highway MPG and Average City MPG than cars running on diesel or gasoline. This is because a majority of the energy from the battery goes into powering the wheels.",
+              title: "Electricity"
             },
             //can use x, y directly instead of data
             x: 490,

@@ -1,63 +1,51 @@
-<!--
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Scene Navigation</title>
-        <style>
-          /* Optional: Basic styling for navigation buttons */
-          .nav-button {
-            padding: 10px 20px;
-            font-size: 16px;
-            cursor: pointer;
-            margin: 10px;
-          }
-        </style>
-    </head>
-    <script src='https://d3js.org/d3.v5.min.js'></script>
-    <style> circle {fill: lightblue; stroke: black;} </style>
-    <body onload='init()'>
-        <div id='canvas' style="text-align:center;"></div>
-        
-        <script>
-            async function init() {
-                var canvas = d3.select('#canvas').append('svg').attr('width', 700).attr('height', 600);
-
-                const data = await d3.csv("https://flunky.github.io/cars2017.csv");
-                var y = d3.scaleLog().domain([10,150]).range([200,0])
-                var x = d3.scaleLog().domain([10,150]).range([0, 200])
-                d3.select("svg").append("g")
-                d3.select("g").attr("transform","translate("+50+","+50+")").selectAll("circle").data(data).enter().append("circle").attr("cx", function(d) {return x(d["AverageCityMPG"]);}).attr("cy", function(d) {return y(d["AverageHighwayMPG"]);}).attr('r', function(d) { return 2+d.EngineCylinders; })
-
-                
-                d3.select("svg").append("g").attr("transform","translate("+50+","+50+")").call(d3.axisLeft(y).tickValues([10, 20, 50, 100]).tickFormat(d3.format("~s")));
-                d3.select("svg").append("g").attr("transform","translate("+50+","+250+")").call(d3.axisBottom(x).tickValues([10, 20, 50, 100]).tickFormat(d3.format("~s")));
-            }
-        </script>
-    </body>
-</html>-->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Page 1</title>
+  <title>Gasoline Cars</title>
 </head>
 <script src="https://d3js.org/d3.v5.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.5.1/d3-annotation.min.js" integrity="sha512-iBAeBWWWFb8HqSBcrqcz98iIpuVH1la39dEYHtyQ/pGpeCQTQVvLJOWAuhv2Q7JSHp9k7hWA7sGxU3hHJe+tFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<style> circle {stroke: black;} </style>
-<button onclick="navigateToPage('index.html')">Go to Page 1</button>
-<button onclick="navigateToPage('scene2.html')">Go to Page 2</button>
-<button onclick="navigateToPage('scene3.html')">Go to Page 3</button>
-<h1>Page 1</h1>
-<div class="chart" style="text-align:center;">
-  <svg id='canvas' width=900 height=900></svg>
+<style> 
+  circle {stroke: black;}
+
+  .button {
+    background-color: grey;
+    color: white;
+    display: inline-block;
+    cursor: pointer;
+  }
+ </style>
+
+<h1>Average Highway MPG & Average City MPG of Cars in 2017</h1>
+<div id="container" style="display: flex;">
+  <div id="content" style="margin-left:30px;inline-size:200px;">
+    <button class="button" onclick="navigateToPage('index.html')">1</button>
+    <button onclick="navigateToPage('scene2.html')">2</button>
+    <button onclick="navigateToPage('scene3.html')">3</button>
+    <h2>Gasoline Cars</h2>
+    <p>
+      Cars that run on gasoline comprise of the majority of the cars in 2017,
+      and thus the majority of cars in the data. There is a linear trend among the cars
+      between average highway mpg and average city mpg. The various makes of the 
+      gasoline cars include:<br> Acura, Alfa Romeo, Aston Martin, Audi, Bentley, 
+      BMW, Buick, Cadillac, Chevrolet, Chrysler, Dodge, Ferrari, Fiat, Ford, 
+      Genesis, GMC, Honda, Hyundai, Infiniti, Jaguar, Jeep, Kia, Lamborghini,
+      Land Rover, Lexus, Lincoln, Lotus, Maserati, Mazda, McLaren Automotive, 
+      Mercedes-Benz, MINI, Mitsubishi, Nissan, Porsche, Ram, Rolls-Royce, 
+      Roush Performance, smart, Subaru, Toyota, Volkswagen, and Volvo.
+    </p>
+  </div>
+  <div class="chart" style="margin-left:45px;">
+    <svg id='canvas' width=900 height=900></svg>
+  </div>
 </div>
+
 <body onload='init()'>
   <script>
       async function init() {
-        
+
           const data = await d3.csv("https://flunky.github.io/cars2017.csv");
           var y = d3.scaleLog().domain([10,150]).range([550,0])
           var x = d3.scaleLog().domain([10,150]).range([0, 550])
@@ -91,8 +79,8 @@
     const annotations = [{
             type: d3.annotationCalloutCircle, 
             note: {
-              label: "Gasoline",
-              title: "Annotation title"
+              label: "Cars that run on gasoline tend to have low Average Highway MPG and Average City MPG. They are not very energy efficient, as a lot of the energy is lost in the form of heat and friction.",
+              title: "Gasoline"
             },
             //can use x, y directly instead of data
             x: 100,
@@ -112,6 +100,4 @@
   <script src="script.js"></script>
 </body>
 </html>
-
-
 

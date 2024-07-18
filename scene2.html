@@ -3,18 +3,42 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Page 2</title>
+  <title>Diesel Cars</title>
 </head>
 <script src='https://d3js.org/d3.v5.min.js'></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3-annotation/2.5.1/d3-annotation.min.js" integrity="sha512-iBAeBWWWFb8HqSBcrqcz98iIpuVH1la39dEYHtyQ/pGpeCQTQVvLJOWAuhv2Q7JSHp9k7hWA7sGxU3hHJe+tFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<style> circle {stroke: black;} </style>
-<button onclick="navigateToPage('index.html')">Go to Page 1</button>
-<button onclick="navigateToPage('scene2.html')">Go to Page 2</button>
-<button onclick="navigateToPage('scene3.html')">Go to Page 3</button>
-<h1>Page 2</h1>
-<div class="chart" style="text-align:center;">
-    <svg id='canvas' width=900 height=900></svg>
+<style> 
+circle {stroke: black;} 
+.button {
+    background-color: grey;
+    color: white;
+    display: inline-block;
+    cursor: pointer;
+  }
+</style>
+<h1>Average Highway MPG & Average City MPG of Cars in 2017</h1>
+<div id="container" style="display: flex;">
+    <div id="content" style="margin-left:30px;inline-size:200px;">
+        <button onclick="navigateToPage('index.html')">1</button>
+        <button class="button" onclick="navigateToPage('scene2.html')">2</button>
+        <button onclick="navigateToPage('scene3.html')">3</button>
+        <h2>Diesel Cars</h2>
+        <p>
+            In comparison with cars that run on gasoline, 
+            there are much fewer diesel cars, and the number of 
+            engine cylinders, determined by the radius of each circle, is not as much 
+            as some of the gasoline cars. The various makes of the 
+            diesel cars are much fewer than the gasoline ones,
+            and include:<br> BMW, Chevrolet, GMC, Jaguar, and Land Rover.
+            
+        </p>
+    </div>
+
+    <div class="chart" style="margin-left:45px;">
+        <svg id='canvas' width=900 height=900></svg>
+    </div>
 </div>
+
 <body onload='init()'>
   <script>
     async function init() {
@@ -53,14 +77,14 @@
     const annotations = [{
             type: d3.annotationCalloutCircle, 
             note: {
-              label: "Diesel",
-              title: "Annotation title"
+              label: "Cars that run on diesel tend to be somewhere in the middle in terms of Average Highway MPG and Average City MPG.",
+              title: "Diesel"
             },
             //can use x, y directly instead of data
             x: 185,
             y: 300, 
-            dy: 100,
-            dx: 200,
+            dy: 70,
+            dx: 100,
             subject: {
               radius: 70,
               radiusPadding: 3
